@@ -1,4 +1,4 @@
-from aiogram.types import KeyboardButton, ReplyKeyboardMarkup,ReplyKeyboardRemove
+from aiogram.types import KeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove
 
 buyurtma_berish = ReplyKeyboardMarkup(
     keyboard=[
@@ -7,8 +7,20 @@ buyurtma_berish = ReplyKeyboardMarkup(
             KeyboardButton('Olib ketish🚶🏼')
         ],
         [
-          KeyboardButton('⬅️Ortga')
+            KeyboardButton('⬅️Ortga')
         ],
+    ],
+    resize_keyboard=True
+)
+
+locations = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton('📍 Locatsiya jo`natish', request_location=True),
+        ],
+        [
+            KeyboardButton('⬅️ Ortga')
+        ]
     ],
     resize_keyboard=True
 )

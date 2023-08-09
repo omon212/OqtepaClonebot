@@ -4,13 +4,13 @@ from aiogram import Bot, Dispatcher, types
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.types import ParseMode
 from Keyboards.inline import asosiy_menyu, ortga1
-from Keyboards.default import buyurtma_berish
+from Keyboards.default import buyurtma_berish, locations
 from aiogram.types import ReplyKeyboardRemove
 API_TOKEN = '6044644610:AAGH3mQRdCHeT6CbqY1XvkhjXP21nOe9cAc'
 
 
 logging.basicConfig(level=logging.INFO)
-bot = Bot(token=API_TOKEN)
+bot = Bot(token=API_TOKEN,parse_mode='HTML')
 dp = Dispatcher(bot)
 dp.middleware.setup(LoggingMiddleware())
 
@@ -71,10 +71,12 @@ async def exit(message: types.Message):
         Shuningdek, aksiyalarni ko'rishingiz va bizning filiallar bilan tanishishingiz mumkin
         ''', reply_markup=asosiy_menyu,)
 
+@dp.message_handler(text = 'Eltib berish🛵')
+async def loc_user(message: types.Message):
+    await message.answer("<b>Eltib berish</b> uchun <b>geo-joylashuvni</b> jo'nating yoki manzilni tanlang",reply_markup=locations)
 
-
-
-
-
+@dp.message_handler(text = '⬅️ Ortga')
+async def exit2(message: types.Message):
+    await message.answer('Orqaga qaytildi',reply_markup=buyurtma_berish)
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
