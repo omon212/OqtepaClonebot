@@ -3,11 +3,11 @@ from aiogram.types import KeyboardButton, ReplyKeyboardMarkup,ReplyKeyboardRemov
 buyurtma_berish = ReplyKeyboardMarkup(
     keyboard=[
         [
-            KeyboardButton('Eltib berish'),
-            KeyboardButton('Olib ketish')
+            KeyboardButton('Eltib berish🛵'),
+            KeyboardButton('Olib ketish🚶🏼')
         ],
         [
-          KeyboardButton('Ortga')
+          KeyboardButton('⬅️Ortga')
         ],
     ],
     resize_keyboard=True

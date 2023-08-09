@@ -8,10 +8,8 @@ from Keyboards.default import buyurtma_berish
 from aiogram.types import ReplyKeyboardRemove
 API_TOKEN = '6044644610:AAGH3mQRdCHeT6CbqY1XvkhjXP21nOe9cAc'
 
-# Logging konfiguratsiyasi
-logging.basicConfig(level=logging.INFO)
 
-# Botni yaratish
+logging.basicConfig(level=logging.INFO)
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot)
 dp.middleware.setup(LoggingMiddleware())
@@ -27,7 +25,7 @@ Shuningdek, aksiyalarni ko'rishingiz va bizning filiallar bilan tanishishingiz m
 ''', reply_markup=asosiy_menyu)
 
 
-@dp.callback_query_handler(text='buyurtma')
+@dp.callback_query_handler(text='Buyurtma')
 async def buyurtmalar(call: types.CallbackQuery):
     await call.answer('Buyurtma Bering❤️')
     await call.message.answer('Buyurtmani birga joylashtiramizmi? 🤗')
@@ -64,6 +62,15 @@ async def back(message: types.Message):
 
     Shuningdek, aksiyalarni ko'rishingiz va bizning filiallar bilan tanishishingiz mumkin
     ''', reply_markup=asosiy_menyu)
+@dp.message_handler(text='⬅️Ortga')
+async def exit(message: types.Message):
+    await message.answer('Buyurtmani birga joylashtiramizmi? 🤗')
+    await message.answer('''
+        Buyurtma berishni boshlash uchun 🛒 Buyurtma qilish tugmasini bosing
+
+        Shuningdek, aksiyalarni ko'rishingiz va bizning filiallar bilan tanishishingiz mumkin
+        ''', reply_markup=asosiy_menyu,)
+
 
 
 
