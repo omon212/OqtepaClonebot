@@ -97,13 +97,12 @@ async def tovuqlar(call: types.CallbackQuery):
 
 @dp.callback_query_handler(text='box')
 async def box(call: types.CallbackQuery):
-    await call.message.answer_photo(photo=url)
     await call.message.answer('''
     Jo'ja box
 Narxi:   26 000 so'm
 Tavsif: Strips 3 dona, kartoshka fri o'rta va ketchup
 Miqdorini tanlang yoki kiriting
-    ''',reply_markup=jojacha)
+    ''',reply_markup=savat)
 
 xech_nima = ''
 @dp.callback_query_handler(text='ortga3')
@@ -119,7 +118,7 @@ async def stips(call: types.CallbackQuery):
 Narxi:   26 000 so'm
 Tavsif: Qarsildoq panirovkadagi uzun shaklda kesilgan tovuq bo'laklari
 Miqdorini tanlang yoki kiriting
-    ''',reply_markup=jojacha)
+    ''',reply_markup=savat)
 
 
 @dp.callback_query_handler(text='stip')
@@ -130,7 +129,7 @@ async def stips(call: types.CallbackQuery):
 Narxi:   16 000 so'm
 Tavsif: Qarsildoq panirovkadagi uzun shaklda kesilgan tovuq bo'laklari
 Miqdorini tanlang yoki kiriting
-    ''',reply_markup=jojacha)
+    ''',reply_markup=savat)
 
 
 @dp.callback_query_handler(text='bayt')
@@ -141,7 +140,7 @@ async def stips(call: types.CallbackQuery):
 Narxi:   16 000 so'm
 Tavsif: Qarsildoq panirovkadagi uzun shaklda kesilgan tovuq bo'laklari
 Miqdorini tanlang yoki kiriting
-    ''',reply_markup=jojacha)
+    ''',reply_markup=savat)
 
 @dp.callback_query_handler(text='ortga2')
 async def ortga2(call: types.CallbackQuery):
