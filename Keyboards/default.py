@@ -24,3 +24,4 @@ locations = ReplyKeyboardMarkup(
     ],
     resize_keyboard=True
 )
+
