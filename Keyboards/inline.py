@@ -523,17 +523,17 @@ sneklar = InlineKeyboardMarkup(
 )
 
 sneks = InlineKeyboardMarkup(
-    inline_keyboard=[
-        [
-            InlineKeyboardButton('-',callback_data='minus'),
-            InlineKeyboardButton("1",callback_data='son'),
-            InlineKeyboardButton('-',callback_data='plus')
+        inline_keyboard=[
+            [
+                InlineKeyboardButton('➖', callback_data='minus_xlapeniyo'),
+                InlineKeyboardButton("1", callback_data='son'),
+                InlineKeyboardButton('➕', callback_data='plus_xlapeniyo')
+            ],
+            [
+                InlineKeyboardButton("Savatga qo'shish", callback_data='savat'),
+            ],
+            [
+                InlineKeyboardButton("⬅Ortga", callback_data='sneks_exit'),
+            ],
         ],
-        [
-            InlineKeyboardButton("Savatga qo'shish", callback_data='savat'),
-        ],
-        [
-            InlineKeyboardButton("⬅Ortga", callback_data='sneks_exit'),
-        ],
-    ],
-)
+    )
