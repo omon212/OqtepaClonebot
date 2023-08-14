@@ -993,14 +993,27 @@ Miqdorini tanlang yoki kiriting
 @dp.callback_query_handler(text='plus_xlapeniyo')
 async def xla_plus(call: types.CallbackQuery):
     global son
-
-    print(True)
     son += 1
-    sneks = InlineKeyboardMarkup(
+
+    # Update the existing inline keyboard with the new value
+    await update_sneks_buttons(call.message.chat.id, call.message.message_id, son)
+
+    # photo = open('pictures/xala.jpg', 'rb')
+    # await call.message.answer_photo(photo=photo)
+    # await call.message.answer('''
+    # Xalapenyo
+    # Narxi:   3 000 so'm
+    # Tavsif: Xalapenyo
+    # Miqdorini tanlang yoki kiriting
+    #     ''', reply_markup=sneks)
+
+
+async def update_sneks_buttons(chat_id, message_id, new_son):
+    new_buttons = InlineKeyboardMarkup(
         inline_keyboard=[
             [
                 InlineKeyboardButton('➖', callback_data='minus_xlapeniyo'),
-                InlineKeyboardButton(f"{son}", callback_data='son'),
+                InlineKeyboardButton(f"{new_son}", callback_data='son'),
                 InlineKeyboardButton('➕', callback_data='plus_xlapeniyo')
             ],
             [
@@ -1012,14 +1025,36 @@ async def xla_plus(call: types.CallbackQuery):
         ],
     )
 
-    photo = open('pictures/xala.jpg', 'rb')
-    await call.message.answer_photo(photo=photo)
-    await call.message.answer('''
-    Xalapenyo
-    Narxi:   3 000 so'm
-    Tavsif: Xalapenyo
-    Miqdorini tanlang yoki kiriting
-        ''', reply_markup=sneks)
+    # Edit the existing message to update the inline keyboard
+    await bot.edit_message_reply_markup(chat_id=chat_id, message_id=message_id, reply_markup=new_buttons)
+
+
+@dp.callback_query_handler(text='minus_xlapeniyo')
+async def minuser(call: types.CallbackQuery):
+    global son
+    son -= 1
+    await update_sneks_buttons1(call.message.chat.id, call.message.message_id, son)
+
+
+async def update_sneks_buttons1(chat_id, message_id, new_son):
+    new_buttons1 = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton('➖', callback_data='minus_xlapeniyo'),
+                InlineKeyboardButton(f"{new_son}", callback_data='son'),
+                InlineKeyboardButton('➕', callback_data='plus_xlapeniyo')
+            ],
+            [
+                InlineKeyboardButton("Savatga qo'shish", callback_data='savat'),
+            ],
+            [
+                InlineKeyboardButton("⬅Ortga", callback_data='sneks_exit'),
+            ],
+        ],
+    )
+
+    # Edit the existing message to update the inline keyboard
+    await bot.edit_message_reply_markup(chat_id=chat_id, message_id=message_id, reply_markup=new_buttons1)
 
 
 @dp.callback_query_handler(text='sneks_exit')
