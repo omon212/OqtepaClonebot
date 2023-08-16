@@ -1081,11 +1081,12 @@ async def set(call: types.CallbackQuery):
 
 
 import openpyxl
-#import A1 case in password.xlsx
-wb = openpyxl.load_workbook('password.xlsx')
-sheet = wb['A1']
-password = sheet['A1'].value
 
+# import A1 case in password.xlsx
+wb = openpyxl.load_workbook('password.xlsx')
+
+sheet = wb.active
+password = sheet['A1'].value
 
 
 class ADMIN(StatesGroup):
@@ -1093,6 +1094,17 @@ class ADMIN(StatesGroup):
     parol_change = State()
     check = State()
     chnage = State()
+
+
+@dp.message_handler(state=ADMIN.chnage)
+async def changer(message: types.Message, state=FSMContext):
+    password = message.text
+    workbook_saver = openpyxl.Workbook()
+    sheet_saver = workbook_saver.active
+    sheet_saver['A1'] = password
+    workbook_saver.save('password.xlsx')
+    await message.answer('parol o`zgartirildi')
+    await state.finish()
 
 
 @dp.message_handler(commands='admin')
@@ -1103,36 +1115,33 @@ async def admin(message: types.Message):
 
 @dp.message_handler(state=ADMIN.parolcha, content_types=types.ContentType.TEXT)
 async def check_password(message: types.Message, state=FSMContext):
+    wb = openpyxl.load_workbook('password.xlsx')
+    sheet = wb.active
+    password = sheet['A1'].value
     if message.text == password:
-        await message.answer('siz admin paneldasiz !',reply_markup=parol)
+        await message.answer('siz admin paneldasiz !', reply_markup=parol)
         await state.finish()
         await ADMIN.parol_change.set()
 
     else:
         await message.reply('Parol xato qayta urinib ko`ring !')
-@dp.message_handler(text = 'Parol ozgartirish',state=ADMIN.parol_change)
-async def change_pass(message: types.Message,state = FSMContext):
+
+
+@dp.message_handler(text='Parol ozgartirish', state=ADMIN.parol_change)
+async def change_pass(message: types.Message, state=FSMContext):
     await message.answer('Eski parolni kiriting !')
     await state.finish()
     await ADMIN.check.set()
+
+
 @dp.message_handler(state=ADMIN.check)
-async def check_password_for_change(message: types.Message,state = FSMContext):
+async def check_password_for_change(message: types.Message, state=FSMContext):
     if message.text == password:
         await message.answer('Yangi parol kiriting !')
         await state.finish()
         await ADMIN.chnage.set()
     else:
         await message.reply('Parol Xato')
-
-@dp.message_handler(state=ADMIN.chnage)
-async def changer(message: types.Message,state = FSMContext):
-    password = message.text
-    workbook_saver = openpyxl.Workbook()
-    sheet_saver = workbook_saver.active
-    sheet_saver['A1'] = password
-    workbook_saver.save('password.xlsx')
-    await message.answer('parol o`zgartirildi')
-    await state.finish()
 
 
 if __name__ == '__main__':
