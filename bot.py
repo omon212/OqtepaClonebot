@@ -1033,6 +1033,7 @@ async def update_sneks_buttons(chat_id, message_id, new_son):
 async def minuser(call: types.CallbackQuery):
     global son
     son -= 1
+    print(call.message.chat.id, call.message.message_id)
     await update_sneks_buttons1(call.message.chat.id, call.message.message_id, son)
 
 
@@ -1074,6 +1075,30 @@ async def set(call: types.CallbackQuery):
 @dp.callback_query_handler(text='menu')
 async def set(call: types.CallbackQuery):
     await call.message.answer('Buyurtmani birga joylashtiramizmi? 🤗', reply_markup=asosiy_menyu)
+
+
+# ------------------------ADMIN------------------------
+password = 'OMON'
+
+
+class ADMIN(StatesGroup):
+    parolcha = State()
+
+
+@dp.message_handler(commands='admin')
+async def admin(message: types.Message):
+    await message.answer('Parolni kiriting !')
+    await ADMIN.parolcha.set()
+
+
+@dp.message_handler(state=ADMIN.parolcha, content_types=types.ContentType.TEXT)
+async def check_password(message: types.Message, state=FSMContext):
+    if message.text == password:
+        await message.answer('siz admin paneldasiz !')
+        await state.finish()
+
+    else:
+        await message.reply('Parol xato qayta urinib ko`ring !')
 
 
 if __name__ == '__main__':
