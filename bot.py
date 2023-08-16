@@ -1078,13 +1078,21 @@ async def set(call: types.CallbackQuery):
 
 
 # ------------------------ADMIN------------------------
-password = 'OMON'
+
+
+import openpyxl
+#import A1 case in password.xlsx
+wb = openpyxl.load_workbook('password.xlsx')
+sheet = wb['A1']
+password = sheet['A1'].value
+
 
 
 class ADMIN(StatesGroup):
     parolcha = State()
     parol_change = State()
     check = State()
+    chnage = State()
 
 
 @dp.message_handler(commands='admin')
@@ -1108,9 +1116,10 @@ async def change_pass(message: types.Message,state = FSMContext):
     await state.finish()
     await ADMIN.check.set()
 @dp.message_handler(state=ADMIN.check)
-async def check_password_for_change(message: types.Message):
+async def check_password_for_change(message: types.Message,state = FSMContext):
     if message.text == password:
         await message.answer('Yangi parol kiriting !')
+        await state.finish()
     else:
         await message.reply('Parol Xato')
 
