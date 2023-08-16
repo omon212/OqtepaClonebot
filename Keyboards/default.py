@@ -25,3 +25,11 @@ locations = ReplyKeyboardMarkup(
     resize_keyboard=True
 )
 
+parol = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton('Parol ozgartirish'),
+            KeyboardButton('Adminlar royxati')
+        ]
+    ]
+)

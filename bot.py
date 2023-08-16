@@ -9,7 +9,7 @@ from Keyboards.inline import salats, ichimliklar_1, hot_tea, choylar, yaxna_wate
 from Keyboards.inline import mirinda1, icetea, mountain, souslar, sous1, lavash_button, lavash_savat, setlar, set_savat, \
     pitsa_savat, pitsa, shaurma
 from Keyboards.inline import klab_sendvich, sneklar, sneks
-from Keyboards.default import buyurtma_berish, locations
+from Keyboards.default import buyurtma_berish, locations, parol
 from aiogram.types import ReplyKeyboardRemove
 
 son = 1
@@ -1083,6 +1083,8 @@ password = 'OMON'
 
 class ADMIN(StatesGroup):
     parolcha = State()
+    parol_change = State()
+    check = State()
 
 
 @dp.message_handler(commands='admin')
@@ -1094,11 +1096,23 @@ async def admin(message: types.Message):
 @dp.message_handler(state=ADMIN.parolcha, content_types=types.ContentType.TEXT)
 async def check_password(message: types.Message, state=FSMContext):
     if message.text == password:
-        await message.answer('siz admin paneldasiz !')
+        await message.answer('siz admin paneldasiz !',reply_markup=parol)
         await state.finish()
+        await ADMIN.parol_change.set()
 
     else:
         await message.reply('Parol xato qayta urinib ko`ring !')
+@dp.message_handler(text = 'Parol ozgartirish',state=ADMIN.parol_change)
+async def change_pass(message: types.Message,state = FSMContext):
+    await message.answer('Eski parolni kiriting !')
+    await state.finish()
+    await ADMIN.check.set()
+@dp.message_handler(state=ADMIN.check)
+async def check_password_for_change(message: types.Message):
+    if message.text == password:
+        await message.answer('Yangi parol kiriting !')
+    else:
+        await message.reply('Parol Xato')
 
 
 if __name__ == '__main__':
