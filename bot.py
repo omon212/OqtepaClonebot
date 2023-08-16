@@ -1120,8 +1120,19 @@ async def check_password_for_change(message: types.Message,state = FSMContext):
     if message.text == password:
         await message.answer('Yangi parol kiriting !')
         await state.finish()
+        await ADMIN.chnage.set()
     else:
         await message.reply('Parol Xato')
+
+@dp.message_handler(state=ADMIN.chnage)
+async def changer(message: types.Message,state = FSMContext):
+    password = message.text
+    workbook_saver = openpyxl.Workbook()
+    sheet_saver = workbook_saver.active
+    sheet_saver['A1'] = password
+    workbook_saver.save('password.xlsx')
+    await message.answer('parol o`zgartirildi')
+    await state.finish()
 
 
 if __name__ == '__main__':
