@@ -12,7 +12,9 @@ from Keyboards.inline import klab_sendvich, sneklar, sneks
 from Keyboards.default import buyurtma_berish, locations, parol
 from aiogram.types import ReplyKeyboardRemove
 
-son = 1
+son = {
+    'user_id': 1
+}
 API_TOKEN = '6044644610:AAGH3mQRdCHeT6CbqY1XvkhjXP21nOe9cAc'
 
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
@@ -24,7 +26,7 @@ bot = Bot(token=API_TOKEN, parse_mode='HTML')
 dp = Dispatcher(bot, storage=MemoryStorage())
 dp.middleware.setup(LoggingMiddleware())
 
-savatchamiz = []
+savatchamiz = {'user_id': []}
 
 
 class Shogirdcha(StatesGroup):
@@ -33,6 +35,8 @@ class Shogirdcha(StatesGroup):
 
 @dp.message_handler(commands='start')
 async def boshlaovchi(message: types.Message):
+    son[f'{message.from_user.id}'] = 1
+    print(son)
     await message.answer('Buyurtmani birga joylashtiramizmi? 🤗', reply_markup=ReplyKeyboardRemove())
     await message.answer('''
 Buyurtma berishni boshlash uchun 🛒 Buyurtma qilish tugmasini bosing
@@ -518,13 +522,6 @@ Miqdorini tanlang yoki kiriting
     ''', reply_markup=sous1)
 
 
-@dp.callback_query_handler(text='savat')
-async def sous(call: types.CallbackQuery):
-    photo = open('pictures/kategoriya.jpg', 'rb')
-    await call.message.answer_photo(photo=photo)
-    await call.message.answer("Kategoriyalardan birini tanlang", reply_markup=snakes)
-
-
 @dp.callback_query_handler(text='lavash')
 async def lavash(call: types.CallbackQuery):
     photo = open('pictures/lavash.jpg', 'rb')
@@ -963,12 +960,11 @@ Miqdorini tanlang yoki kiriting
 @dp.callback_query_handler(text='xala')
 async def set(call: types.CallbackQuery):
     global son
-    son = 1
     sneks = InlineKeyboardMarkup(
         inline_keyboard=[
             [
                 InlineKeyboardButton('➖', callback_data='minus_xlapeniyo'),
-                InlineKeyboardButton(f"{son}", callback_data='son'),
+                InlineKeyboardButton(f"{son[f'{call.message.chat.id}']}", callback_data='son'),
                 InlineKeyboardButton('➕', callback_data='plus_xlapeniyo')
             ],
             [
@@ -993,11 +989,18 @@ Miqdorini tanlang yoki kiriting
 @dp.callback_query_handler(text='plus_xlapeniyo')
 async def xla_plus(call: types.CallbackQuery):
     global son
-    son += 1
+    user_id = str(call.message.chat.id)
+
+    # Retrieve the user's value from the dictionary, default to 0 if not found
+    print(son)
+    fake_son = son.get(user_id, 0)
+    fake_son += 1
+
+    # Update the dictionary with the new value
+    son[user_id] = fake_son
 
     # Update the existing inline keyboard with the new value
-    await update_sneks_buttons(call.message.chat.id, call.message.message_id, son)
-
+    await update_sneks_buttons(call.message.chat.id, call.message.message_id, fake_son)
     # photo = open('pictures/xala.jpg', 'rb')
     # await call.message.answer_photo(photo=photo)
     # await call.message.answer('''
@@ -1032,8 +1035,9 @@ async def update_sneks_buttons(chat_id, message_id, new_son):
 @dp.callback_query_handler(text='minus_xlapeniyo')
 async def minuser(call: types.CallbackQuery):
     global son
-    son -= 1
-    print(call.message.chat.id, call.message.message_id)
+    fake_son = son[f'{call.message.chat.id}']
+    fake_son += 1
+    son[f'{call.message.chat.id}'] = fake_son
     await update_sneks_buttons1(call.message.chat.id, call.message.message_id, son)
 
 
