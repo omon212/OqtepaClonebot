@@ -530,7 +530,7 @@ sneks = InlineKeyboardMarkup(
                 InlineKeyboardButton('➕', callback_data='plus_xlapeniyo')
             ],
             [
-                InlineKeyboardButton("Savatga qo'shish", callback_data='savat'),
+                InlineKeyboardButton("Savatga qo'shish", callback_data='savatcha_snek'),
             ],
             [
                 InlineKeyboardButton("⬅Ortga", callback_data='sneks_exit'),

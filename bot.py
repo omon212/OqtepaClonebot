@@ -968,7 +968,7 @@ async def set(call: types.CallbackQuery):
                 InlineKeyboardButton('➕', callback_data='plus_xlapeniyo')
             ],
             [
-                InlineKeyboardButton("Savatga qo'shish", callback_data='savat'),
+                InlineKeyboardButton("Savatga qo'shish", callback_data='savatcha_snek'),
             ],
             [
                 InlineKeyboardButton("⬅Ortga", callback_data='sneks_exit'),
@@ -1020,7 +1020,7 @@ async def update_sneks_buttons(chat_id, message_id, new_son):
                 InlineKeyboardButton('➕', callback_data='plus_xlapeniyo')
             ],
             [
-                InlineKeyboardButton("Savatga qo'shish", callback_data='savat'),
+                InlineKeyboardButton("Savatga qo'shish", callback_data='savatcha_snek'),
             ],
             [
                 InlineKeyboardButton("⬅Ortga", callback_data='sneks_exit'),
@@ -1036,9 +1036,9 @@ async def update_sneks_buttons(chat_id, message_id, new_son):
 async def minuser(call: types.CallbackQuery):
     global son
     fake_son = son[f'{call.message.chat.id}']
-    fake_son += 1
+    fake_son -= 1
     son[f'{call.message.chat.id}'] = fake_son
-    await update_sneks_buttons1(call.message.chat.id, call.message.message_id, son)
+    await update_sneks_buttons1(call.message.chat.id, call.message.message_id, fake_son)
 
 
 async def update_sneks_buttons1(chat_id, message_id, new_son):
@@ -1050,7 +1050,7 @@ async def update_sneks_buttons1(chat_id, message_id, new_son):
                 InlineKeyboardButton('➕', callback_data='plus_xlapeniyo')
             ],
             [
-                InlineKeyboardButton("Savatga qo'shish", callback_data='savat'),
+                InlineKeyboardButton("Savatga qo'shish", callback_data='savatcha_snek'),
             ],
             [
                 InlineKeyboardButton("⬅Ortga", callback_data='sneks_exit'),
@@ -1146,6 +1146,8 @@ async def check_password_for_change(message: types.Message, state=FSMContext):
         await ADMIN.chnage.set()
     else:
         await message.reply('Parol Xato')
+
+
 
 
 if __name__ == '__main__':
