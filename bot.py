@@ -15,7 +15,7 @@ from aiogram.types import ReplyKeyboardRemove
 son = {
     'user_id': 1
 }
-API_TOKEN = '6466547889:AAHNTOvDNTCEvuD9nDXSkqtV-0MhLU65TUY'
+API_TOKEN = '6466547889:AAHqTRPDs5MB6Kni-phoTDc53CzgQzrJx0Q'
 
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher import FSMContext
@@ -31,17 +31,11 @@ savatchamiz = {'user_id': []}
 
 class Shogirdcha(StatesGroup):
     loc_yetkazib_berish = State()
-    buyurtmachi = State()
-
-
-savatchamiz_user = {
-    'user_id': [],
-}
 
 
 @dp.message_handler(commands='start')
 async def boshlaovchi(message: types.Message):
-    son[message.from_user.id] = 1
+    son[f'{message.from_user.id}'] = 1
     print(son)
     await message.answer('Buyurtmani birga joylashtiramizmi? 🤗', reply_markup=ReplyKeyboardRemove())
     await message.answer('''
@@ -1123,18 +1117,30 @@ async def admin(message: types.Message):
     await ADMIN.parolcha.set()
 
 
+ADMINS1 = ''
+
+
 @dp.message_handler(state=ADMIN.parolcha, content_types=types.ContentType.TEXT)
 async def check_password(message: types.Message, state=FSMContext):
     wb = openpyxl.load_workbook('password.xlsx')
     sheet = wb.active
     password = sheet['A1'].value
     if message.text == password:
+        global ADMINS1
+        ADMINS1 += f'👽 {message.chat.id}-{message.chat.first_name}\n'
         await message.answer('siz admin paneldasiz !', reply_markup=parol)
         await state.finish()
         await ADMIN.parol_change.set()
 
     else:
         await message.reply('Parol xato qayta urinib ko`ring !')
+
+
+@dp.message_handler(text='Adminlar royxati', state=ADMIN.parol_change)
+async def admin_list(message: types.Message, state=FSMContext):
+    await message.answer('Adminlar ro`yxati')
+    await message.answer(ADMINS1)
+    await state.finish()
 
 
 @dp.message_handler(text='Parol ozgartirish', state=ADMIN.parol_change)
