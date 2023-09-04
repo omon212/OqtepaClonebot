@@ -970,7 +970,7 @@ async def set(call: types.CallbackQuery):
         inline_keyboard=[
             [
                 InlineKeyboardButton('➖', callback_data='minus_xlapeniyo'),
-                InlineKeyboardButton(f"{son[call.message.chat.id]}", callback_data='son'),
+                InlineKeyboardButton(f"{son[f'{call.message.chat.id}']}", callback_data='son'),
                 InlineKeyboardButton('➕', callback_data='plus_xlapeniyo')
             ],
             [
