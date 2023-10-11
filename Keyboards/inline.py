@@ -537,3 +537,12 @@ sneks = InlineKeyboardMarkup(
             ],
         ],
     )
+
+oshpaz = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [
+            InlineKeyboardButton('✅', callback_data='true'),
+            InlineKeyboardButton('❌️️️️️️️',callback_data='false')
+        ]
+    ]
+)
