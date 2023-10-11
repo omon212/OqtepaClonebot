@@ -1161,9 +1161,6 @@ async def check_password_for_change(message: types.Message, state=FSMContext):
 
 
 
-
-
 if __name__ == '__main__':
     from savatcha import dp
-
     executor.start_polling(dp, skip_updates=True)
