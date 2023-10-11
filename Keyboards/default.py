@@ -33,3 +33,13 @@ parol = ReplyKeyboardMarkup(
         ]
     ]
 )
+
+buy = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton('Buyurtmani tasdiqlash')
+        ]
+    ],
+    resize_keyboard=True,
+    one_time_keyboard=True
+)
