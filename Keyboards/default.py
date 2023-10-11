@@ -31,7 +31,9 @@ parol = ReplyKeyboardMarkup(
             KeyboardButton('Parol ozgartirish'),
             KeyboardButton('Adminlar royxati')
         ]
-    ]
+    ],
+    resize_keyboard=True,
+    one_time_keyboard=True,
 )
 
 buy = ReplyKeyboardMarkup(

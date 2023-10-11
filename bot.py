@@ -31,17 +31,11 @@ savatchamiz = {'user_id': []}
 
 class Shogirdcha(StatesGroup):
     loc_yetkazib_berish = State()
-    buyurtmachi = State()
-
-
-savatchamiz_user = {
-    'user_id': [],
-}
 
 
 @dp.message_handler(commands='start')
 async def boshlaovchi(message: types.Message):
-    son[message.from_user.id] = 1
+    son[f'{message.from_user.id}'] = 1
     print(son)
     await message.answer('Buyurtmani birga joylashtiramizmi? 🤗', reply_markup=ReplyKeyboardRemove())
     await message.answer('''
@@ -970,7 +964,7 @@ async def set(call: types.CallbackQuery):
         inline_keyboard=[
             [
                 InlineKeyboardButton('➖', callback_data='minus_xlapeniyo'),
-                InlineKeyboardButton(f"{son[call.message.chat.id]}", callback_data='son'),
+                InlineKeyboardButton(f"{son[f'{call.message.chat.id}']}", callback_data='son'),
                 InlineKeyboardButton('➕', callback_data='plus_xlapeniyo')
             ],
             [
