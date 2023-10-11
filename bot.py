@@ -1123,18 +1123,30 @@ async def admin(message: types.Message):
     await ADMIN.parolcha.set()
 
 
+ADMINS1 = ''
+
+
 @dp.message_handler(state=ADMIN.parolcha, content_types=types.ContentType.TEXT)
 async def check_password(message: types.Message, state=FSMContext):
     wb = openpyxl.load_workbook('password.xlsx')
     sheet = wb.active
     password = sheet['A1'].value
     if message.text == password:
+        global ADMINS1
+        ADMINS1 += f'👽 {message.chat.id}-{message.chat.first_name}\n'
         await message.answer('siz admin paneldasiz !', reply_markup=parol)
         await state.finish()
         await ADMIN.parol_change.set()
 
     else:
         await message.reply('Parol xato qayta urinib ko`ring !')
+
+
+@dp.message_handler(text='Adminlar royxati', state=ADMIN.parol_change)
+async def admin_list(message: types.Message, state=FSMContext):
+    await message.answer('Adminlar ro`yxati')
+    await message.answer(ADMINS1)
+    await state.finish()
 
 
 @dp.message_handler(text='Parol ozgartirish', state=ADMIN.parol_change)
@@ -1155,8 +1167,7 @@ async def check_password_for_change(message: types.Message, state=FSMContext):
 
 
 
-
-
 if __name__ == '__main__':
     from savatcha import dp
+
     executor.start_polling(dp, skip_updates=True)
