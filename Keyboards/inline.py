@@ -541,8 +541,18 @@ sneks = InlineKeyboardMarkup(
 oshpaz = InlineKeyboardMarkup(
     inline_keyboard=[
         [
-            InlineKeyboardButton('✅', callback_data='true'),
-            InlineKeyboardButton('❌️️️️️️️',callback_data='false')
+            InlineKeyboardButton('✅', callback_data='oshpaz_true'),
+            InlineKeyboardButton('❌️️️️️️️',callback_data='oshpaz_false')
+        ]
+    ]
+)
+
+
+kuryer_button = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [
+            InlineKeyboardButton('✅', callback_data='kuryer_true'),
+            InlineKeyboardButton('❌️️️️️️️',callback_data='kuryer_false')
         ]
     ]
 )
