@@ -3,7 +3,7 @@ from aiogram import executor
 from aiogram import Bot, Dispatcher, types
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.types import ParseMode, InlineKeyboardMarkup, InlineKeyboardButton
-from Keyboards.inline import asosiy_menyu, ortga1, snakes, qarsildoq_oyoqlar, savat, savat_salatlar
+from Keyboards.inline import asosiy_menyu, ortga1, snakes, qarsildoq_oyoqlar, savat, savat_salatlar, kuryer_button
 from Keyboards.inline import salats, ichimliklar_1, hot_tea, choylar, yaxna_water, pepsi_water, pepsi_savat, \
     dolina_choy, burgers_savat, burgerlar
 from Keyboards.inline import mirinda1, icetea, mountain, souslar, sous1, lavash_button, lavash_savat, setlar, set_savat, \
@@ -15,7 +15,11 @@ from aiogram.types import ReplyKeyboardRemove
 son = {
     'user_id': 1
 }
-API_TOKEN = '6466547889:AAHqTRPDs5MB6Kni-phoTDc53CzgQzrJx0Q'
+location = {
+    'location':''
+}
+
+API_TOKEN = '6463203653:AAGlhTi1w2xvRHfOoh5BuHwLrK5l0JD2-_o'
 
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher import FSMContext
@@ -31,11 +35,17 @@ savatchamiz = {'user_id': []}
 
 class Shogirdcha(StatesGroup):
     loc_yetkazib_berish = State()
+    buyurtmachi = State()
+
+
+savatchamiz_user = {
+    'user_id': [],
+}
 
 
 @dp.message_handler(commands='start')
 async def boshlaovchi(message: types.Message):
-    son[f'{message.from_user.id}'] = 1
+    son[message.from_user.id] = 1
     print(son)
     await message.answer('Buyurtmani birga joylashtiramizmi? 🤗', reply_markup=ReplyKeyboardRemove())
     await message.answer('''
@@ -99,8 +109,7 @@ async def exit(message: types.Message):
 
 @dp.message_handler(text='Eltib berish🛵')
 async def loc_user(message: types.Message):
-    await message.answer("<b>Eltib berish</b> uchun <b>geo-joylashuvni</b> jo'nating yoki manzilni tanlang",
-                         reply_markup=locations)
+    await message.answer("<b>Eltib berish</b> uchun <b>geo-joylashuvni</b> jo'nating yoki manzilni tanlang",reply_markup=locations)
     await Shogirdcha.loc_yetkazib_berish.set()
 
 
@@ -111,6 +120,10 @@ async def exit2(message: types.Message):
 
 @dp.message_handler(content_types=types.ContentType.LOCATION, state=Shogirdcha.loc_yetkazib_berish)
 async def location_saver(message: types.Message, state: FSMContext):
+    global LL
+    LL = message.location
+
+
     await message.answer('Locatsiya qabul qilindi', reply_markup=ReplyKeyboardRemove())
     photo = open('pictures/kategoriya.jpg', 'rb')
     await message.answer('Kategoriyalrdan birini tanlang')
@@ -339,6 +352,11 @@ Narxi:   17 000 so'm
 Tavsif: Pepsi 1.5
 Miqdorini tanlang yoki kiriting
     ''', reply_markup=pepsi_savat)
+
+
+
+
+
 
 
 @dp.callback_query_handler(text='pepsi0.4')
@@ -964,7 +982,7 @@ async def set(call: types.CallbackQuery):
         inline_keyboard=[
             [
                 InlineKeyboardButton('➖', callback_data='minus_xlapeniyo'),
-                InlineKeyboardButton(f"{son[f'{call.message.chat.id}']}", callback_data='son'),
+                InlineKeyboardButton(f"{son[call.message.chat.id]}", callback_data='son'),
                 InlineKeyboardButton('➕', callback_data='plus_xlapeniyo')
             ],
             [
@@ -990,6 +1008,7 @@ Miqdorini tanlang yoki kiriting
 async def xla_plus(call: types.CallbackQuery):
     global son
     user_id = str(call.message.chat.id)
+    print(user_id)
 
     # Retrieve the user's value from the dictionary, default to 0 if not found
     print(son)
@@ -1117,30 +1136,18 @@ async def admin(message: types.Message):
     await ADMIN.parolcha.set()
 
 
-ADMINS1 = ''
-
-
 @dp.message_handler(state=ADMIN.parolcha, content_types=types.ContentType.TEXT)
 async def check_password(message: types.Message, state=FSMContext):
     wb = openpyxl.load_workbook('password.xlsx')
     sheet = wb.active
     password = sheet['A1'].value
     if message.text == password:
-        global ADMINS1
-        ADMINS1 += f'👽 {message.chat.id}-{message.chat.first_name}\n'
         await message.answer('siz admin paneldasiz !', reply_markup=parol)
         await state.finish()
         await ADMIN.parol_change.set()
 
     else:
         await message.reply('Parol xato qayta urinib ko`ring !')
-
-
-@dp.message_handler(text='Adminlar royxati', state=ADMIN.parol_change)
-async def admin_list(message: types.Message, state=FSMContext):
-    await message.answer('Adminlar ro`yxati')
-    await message.answer(ADMINS1)
-    await state.finish()
 
 
 @dp.message_handler(text='Parol ozgartirish', state=ADMIN.parol_change)
@@ -1161,6 +1168,28 @@ async def check_password_for_change(message: types.Message, state=FSMContext):
 
 
 
+
+@dp.callback_query_handler(text='oshpaz_true', state=Shogirdcha.buyurtmachi)
+async def oshpazasdfasdf(call: types.CallbackQuery):
+    await call.message.answer('Buyurtmangiz tayorlanmoqda\n\nTez orada yetib boradi😊')
+    await bot.send_message(5845470448, 'Yangi buyurtma🍔\n\nYetkazib berishni tasdiqlang (✅/❌)',reply_markup=kuryer_button)
+    await bot.send_location(5845470448, LL['latitude'], LL['longitude'])
+
+@dp.callback_query_handler(text='kuryer_true',state=Shogirdcha.buyurtmachi)
+async def kuryer_asdf(call:types.CallbackQuery):
+    await call.message.answer('Buyurtmangiz yarim soat ichida olib boriladi\n\nSiz bilan kuryer aloqaga chiqishini kuting😇')
+
+
+
+
+
+
+
 if __name__ == '__main__':
     from savatcha import dp
     executor.start_polling(dp, skip_updates=True)
+
+
+
+
+
