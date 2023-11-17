@@ -18,7 +18,7 @@ son = {
 }
 
 
-API_TOKEN = '6539001396:AAHTx8uhcJSf2qqBLWHIVwn-LCvkrVnObEE'
+API_TOKEN = ''
 
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher import FSMContext
