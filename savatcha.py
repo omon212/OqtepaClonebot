@@ -26,4 +26,5 @@ async def apply(message: Message, state=FSMContext):
     txt = ''
     for i in range(len(savatchamiz_user[message.from_user.id])):
         txt += f'{i + 1}.' + ' 🍟mahsulot ' + savatchamiz_user[message.from_user.id][i] + '\n'
-    await bot.send_message(5172746353,txt,reply_markup=oshpaz)
+    await bot.send_message(6580480307,txt,reply_markup=oshpaz)
+    await state.finish()

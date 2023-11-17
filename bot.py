@@ -15,11 +15,9 @@ from aiogram.types import ReplyKeyboardRemove
 son = {
     'user_id': 1
 }
-location = {
-    'location':''
-}
 
-API_TOKEN = '6463203653:AAGlhTi1w2xvRHfOoh5BuHwLrK5l0JD2-_o'
+
+API_TOKEN = '6539001396:AAHTx8uhcJSf2qqBLWHIVwn-LCvkrVnObEE'
 
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher import FSMContext
@@ -30,7 +28,6 @@ bot = Bot(token=API_TOKEN, parse_mode='HTML')
 dp = Dispatcher(bot, storage=MemoryStorage())
 dp.middleware.setup(LoggingMiddleware())
 
-savatchamiz = {'user_id': []}
 
 
 class Shogirdcha(StatesGroup):
@@ -45,6 +42,7 @@ savatchamiz_user = {
 
 @dp.message_handler(commands='start')
 async def boshlaovchi(message: types.Message):
+
     son[message.from_user.id] = 1
     print(son)
     await message.answer('Buyurtmani birga joylashtiramizmi? 🤗', reply_markup=ReplyKeyboardRemove())
@@ -52,6 +50,8 @@ async def boshlaovchi(message: types.Message):
 Buyurtma berishni boshlash uchun 🛒 Buyurtma qilish tugmasini bosing
  
 Shuningdek, aksiyalarni ko'rishingiz va bizning filiallar bilan tanishishingiz mumkin
+
+<a href="https://telegra.ph/Taomnoma-09-30">Oqtepa Lavash Menu</a>
 ''', reply_markup=asosiy_menyu)
 
 
@@ -1172,8 +1172,8 @@ async def check_password_for_change(message: types.Message, state=FSMContext):
 @dp.callback_query_handler(text='oshpaz_true', state=Shogirdcha.buyurtmachi)
 async def oshpazasdfasdf(call: types.CallbackQuery):
     await call.message.answer('Buyurtmangiz tayorlanmoqda\n\nTez orada yetib boradi😊')
-    await bot.send_message(5845470448, 'Yangi buyurtma🍔\n\nYetkazib berishni tasdiqlang (✅/❌)',reply_markup=kuryer_button)
-    await bot.send_location(5845470448, LL['latitude'], LL['longitude'])
+    await bot.send_message(6580480307, 'Yangi buyurtma🍔\n\nYetkazib berishni tasdiqlang (✅/❌)',reply_markup=kuryer_button)
+    await bot.send_location(6580480307, LL['latitude'], LL['longitude'])
 
 @dp.callback_query_handler(text='kuryer_true',state=Shogirdcha.buyurtmachi)
 async def kuryer_asdf(call:types.CallbackQuery):
