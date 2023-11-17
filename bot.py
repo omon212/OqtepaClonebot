@@ -11,6 +11,7 @@ from Keyboards.inline import mirinda1, icetea, mountain, souslar, sous1, lavash_
 from Keyboards.inline import klab_sendvich, sneklar, sneks
 from Keyboards.default import buyurtma_berish, locations, parol
 from aiogram.types import ReplyKeyboardRemove
+import sqlite3
 
 son = {
     'user_id': 1
@@ -39,10 +40,47 @@ savatchamiz_user = {
     'user_id': [],
 }
 
+conn = sqlite3.connect('stats.db')
+cursor = conn.cursor()
+
+cursor.execute('''CREATE TABLE IF NOT EXISTS stats
+                  (id INTEGER PRIMARY KEY AUTOINCREMENT,
+                   user_id INTEGER,
+                   date DATE)''')
+conn.commit()
+
+def record_stat(user_id):
+    cursor.execute("INSERT INTO stats (user_id, date) VALUES (?, DATE('now'))", (user_id,))
+    conn.commit()
+
+
+@dp.message_handler(commands=['stats'])
+async def show_stats(message: types.Message):
+    cursor.execute("SELECT COUNT(DISTINCT user_id) FROM stats")
+    total_users = cursor.fetchone()[0]
+    cursor.execute("SELECT COUNT(DISTINCT user_id) FROM stats WHERE date = DATE('now')")
+    today_users = cursor.fetchone()[0]
+    cursor.execute("SELECT COUNT(*) FROM stats")
+    total_requests = cursor.fetchone()[0]
+    cursor.execute("SELECT COUNT(*) FROM stats WHERE date = DATE('now')")
+    today_requests = cursor.fetchone()[0]
+
+    text = f"📊 Botdan foydalanish statistikasi:\n" \
+           f" ├ Jami foydalanuvchilar: {total_users}\n" \
+           f" ├ Bugungi foydalanuvchilar: {today_users}\n" \
+           f" ├ Jami so'rovlar: {total_requests}\n" \
+           f" └ Bugungi so'rovlar: {today_requests}"
+
+    await message.reply(text)
+
+
+
+
+
+
 
 @dp.message_handler(commands='start')
 async def boshlaovchi(message: types.Message):
-
     son[message.from_user.id] = 1
     print(son)
     await message.answer('Buyurtmani birga joylashtiramizmi? 🤗', reply_markup=ReplyKeyboardRemove())
@@ -53,12 +91,12 @@ Shuningdek, aksiyalarni ko'rishingiz va bizning filiallar bilan tanishishingiz m
 
 <a href="https://telegra.ph/Taomnoma-09-30">Oqtepa Lavash Menu</a>
 ''', reply_markup=asosiy_menyu)
+    await record_stat(message.from_user.id)
 
 
 @dp.callback_query_handler(text='Buyurtma')
 async def buyurtmalar(call: types.CallbackQuery):
     await call.answer('Buyurtma Bering❤️')
-    await call.message.answer('Buyurtmani birga joylashtiramizmi? 🤗')
     await call.message.answer('Buyurtma turini tanlang', reply_markup=buyurtma_berish)
 
 
@@ -97,13 +135,15 @@ async def back(message: types.Message):
     ''', reply_markup=asosiy_menyu)
 
 
-@dp.message_handler(text='⬅️Ortga')
+@dp.message_handler(text='⬅️Ortga',state=Shogirdcha.loc_yetkazib_berish)
 async def exit(message: types.Message):
     await message.answer('Buyurtmani birga joylashtiramizmi? 🤗')
     await message.answer('''
-        Buyurtma berishni boshlash uchun 🛒 Buyurtma qilish tugmasini bosing
+Buyurtma berishni boshlash uchun 🛒 Buyurtma qilish tugmasini bosing
+ 
+Shuningdek, aksiyalarni ko'rishingiz va bizning filiallar bilan tanishishingiz mumkin
 
-        Shuningdek, aksiyalarni ko'rishingiz va bizning filiallar bilan tanishishingiz mumkin
+<a href="https://telegra.ph/Taomnoma-09-30">Oqtepa Lavash Menu</a>
         ''', reply_markup=asosiy_menyu, )
 
 
@@ -113,15 +153,15 @@ async def loc_user(message: types.Message):
     await Shogirdcha.loc_yetkazib_berish.set()
 
 
-@dp.message_handler(text='⬅️ Ortga')
-async def exit2(message: types.Message):
-    await message.answer('Orqaga qaytildi', reply_markup=buyurtma_berish)
+
 
 
 @dp.message_handler(content_types=types.ContentType.LOCATION, state=Shogirdcha.loc_yetkazib_berish)
 async def location_saver(message: types.Message, state: FSMContext):
     global LL
     LL = message.location
+
+
 
 
     await message.answer('Locatsiya qabul qilindi', reply_markup=ReplyKeyboardRemove())
@@ -1166,18 +1206,35 @@ async def check_password_for_change(message: types.Message, state=FSMContext):
     else:
         await message.reply('Parol Xato')
 
+from Keyboards.inline import check_oshpaz
+@dp.message_handler(text='Buyurtmani tasdiqlash', state=Shogirdcha.buyurtmachi)
+async def apply(message: types.Message, state=FSMContext):
+    global userid
+    await message.answer('Sizning Buyurtmangiz Qabul qilindi!\n\nYaqin orada javobini olasiz.')
+    await message.answer('⏳')
+    txt = ''
+    for i in range(len(savatchamiz_user[message.from_user.id])):
+        txt += f'{i + 1}.' + ' 🍟mahsulot ' + savatchamiz_user[message.from_user.id][i] + '\n'
+    await bot.send_message(6498877955, txt, reply_markup=check_oshpaz)
+    latitudee = LL['latitude']
+    longitudeee = LL['longitude']
+    await bot.send_location(6498877955, latitudee, longitudeee)
+    userid = message.from_user.id
 
 
 
-@dp.callback_query_handler(text='oshpaz_true', state=Shogirdcha.buyurtmachi)
-async def oshpazasdfasdf(call: types.CallbackQuery):
-    await call.message.answer('Buyurtmangiz tayorlanmoqda\n\nTez orada yetib boradi😊')
-    await bot.send_message(6580480307, 'Yangi buyurtma🍔\n\nYetkazib berishni tasdiqlang (✅/❌)',reply_markup=kuryer_button)
-    await bot.send_location(6580480307, LL['latitude'], LL['longitude'])
 
-@dp.callback_query_handler(text='kuryer_true',state=Shogirdcha.buyurtmachi)
-async def kuryer_asdf(call:types.CallbackQuery):
-    await call.message.answer('Buyurtmangiz yarim soat ichida olib boriladi\n\nSiz bilan kuryer aloqaga chiqishini kuting😇')
+@dp.callback_query_handler(text='oshpaz_true',state=Shogirdcha.buyurtmachi)
+async def oshaptrue(call: types.CallbackQuery):
+    await bot.send_message( userid , "Buyurtmangiz yarim saot ichida yetkazib beriladi",reply_markup=ReplyKeyboardRemove())
+    await state.finish()
+
+
+@dp.callback_query_handler(text='oshpaz_false',state=Shogirdcha.buyurtmachi)
+async def oshapfalse(call: types.CallbackQuery):
+    await bot.send_message(userid,"Buyurtmangiz bekor qilindi",reply_markup=ReplyKeyboardRemove())
+    await state.finish()
+
 
 
 

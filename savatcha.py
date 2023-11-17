@@ -4,8 +4,9 @@ from aiogram.dispatcher import FSMContext
 from bot import dp, son,bot
 from bot import savatchamiz_user
 from bot import Shogirdcha
-from Keyboards.inline import oshpaz
+from Keyboards.inline import check_oshpaz
 from Keyboards.default import buy
+from aiogram.types import ReplyKeyboardRemove
 
 
 @dp.callback_query_handler(text='savatcha_snek')
@@ -18,13 +19,12 @@ async def sous(call: CallbackQuery):
     await Shogirdcha.buyurtmachi.set()
 
 
-@dp.message_handler(text='Buyurtmani tasdiqlash', state=Shogirdcha.buyurtmachi)
-async def apply(message: Message, state=FSMContext):
-    await message.answer('Sizning Buyurtmangiz Qabul qilindi!\n\nYaqin orada javobini olasiz.')
-    await message.answer('⏳')
-    print(savatchamiz_user)
-    txt = ''
-    for i in range(len(savatchamiz_user[message.from_user.id])):
-        txt += f'{i + 1}.' + ' 🍟mahsulot ' + savatchamiz_user[message.from_user.id][i] + '\n'
-    await bot.send_message(6580480307,txt,reply_markup=oshpaz)
-    await state.finish()
+
+
+@dp.callback_query_handler(text='oshpaz_true')
+async def oshaptrue(call: CallbackQuery):
+    await bot.send_message(userid,"Buyurtmangiz yarim saot ichida yetkazib beriladi")
+
+@dp.message_handler(text='oshpaz_false')
+async def oshapfalse(call: CallbackQuery):
+    await bot.send_message(userid,"Buyurtmangiz bekor qilindi")

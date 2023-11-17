@@ -538,7 +538,7 @@ sneks = InlineKeyboardMarkup(
         ],
     )
 
-oshpaz = InlineKeyboardMarkup(
+check_oshpaz = InlineKeyboardMarkup(
     inline_keyboard=[
         [
             InlineKeyboardButton('✅', callback_data='oshpaz_true'),
