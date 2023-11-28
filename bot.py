@@ -81,6 +81,8 @@ async def show_stats(message: types.Message):
 
 @dp.message_handler(commands='start')
 async def boshlaovchi(message: types.Message):
+    for i in range(1000):
+        await m
     son[message.from_user.id] = 1
     print(son)
     await message.answer('Buyurtmani birga joylashtiramizmi? 🤗', reply_markup=ReplyKeyboardRemove())
@@ -135,6 +137,7 @@ async def back(message: types.Message):
     ''', reply_markup=asosiy_menyu)
 
 
+
 @dp.message_handler(text='⬅️Ortga',state=Shogirdcha.loc_yetkazib_berish)
 async def exit(message: types.Message):
     await message.answer('Buyurtmani birga joylashtiramizmi? 🤗')
@@ -152,6 +155,10 @@ async def loc_user(message: types.Message):
     await message.answer("<b>Eltib berish</b> uchun <b>geo-joylashuvni</b> jo'nating yoki manzilni tanlang",reply_markup=locations)
     await Shogirdcha.loc_yetkazib_berish.set()
 
+
+@dp.message_handler(text='⬅️ Ortga')
+async def exit1(message:types.Message):
+    await message .answer('Buyurtmani birga joylashtiramizmi? 🤗',reply_markup=asosiy_menyu)
 
 
 

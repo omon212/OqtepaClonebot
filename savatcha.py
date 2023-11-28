@@ -23,8 +23,8 @@ async def sous(call: CallbackQuery):
 
 @dp.callback_query_handler(text='oshpaz_true')
 async def oshaptrue(call: CallbackQuery):
-    await bot.send_message(userid,"Buyurtmangiz yarim saot ichida yetkazib beriladi")
+    await bot.send_message(f"{call.message.chat.id}","Buyurtmangiz yarim saot ichida yetkazib beriladi")
 
 @dp.message_handler(text='oshpaz_false')
 async def oshapfalse(call: CallbackQuery):
-    await bot.send_message(userid,"Buyurtmangiz bekor qilindi")
+    await bot.send_message(f"{call.message.chat.id}","Buyurtmangiz bekor qilindi")
