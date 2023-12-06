@@ -12,7 +12,7 @@ from Keyboards.inline import klab_sendvich, sneklar, sneks
 from Keyboards.default import buyurtma_berish, locations, parol
 from aiogram.types import ReplyKeyboardRemove
 
-    @dp.message_handler(state=ADMIN.check)
+@dp.message_handler(state=ADMIN.check)
 async def check_password_for_change(message: types.Message, state=FSMContext):
     if message.text == password:
         await message.answer('Yangi parol kiriting🆕️️ !')
@@ -20,4 +20,6 @@ async def check_password_for_change(message: types.Message, state=FSMContext):
         await ADMIN.chnage.set()
     else:
         await message.reply('Parol Xato')
+
+
     
