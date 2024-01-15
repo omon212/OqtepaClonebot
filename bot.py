@@ -3,12 +3,7 @@ from aiogram import executor
 from aiogram import Bot, Dispatcher, types
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.types import ParseMode, InlineKeyboardMarkup, InlineKeyboardButton
-from Keyboards.inline import asosiy_menyu, ortga1, snakes, qarsildoq_oyoqlar, savat, savat_salatlar, kuryer_button
-from Keyboards.inline import salats, ichimliklar_1, hot_tea, choylar, yaxna_water, pepsi_water, pepsi_savat, \
-    dolina_choy, burgers_savat, burgerlar
-from Keyboards.inline import mirinda1, icetea, mountain, souslar, sous1, lavash_button, lavash_savat, setlar, set_savat, \
-    pitsa_savat, pitsa, shaurma
-from Keyboards.inline import klab_sendvich, sneklar, sneks
+from Keyboards.inline import *
 from Keyboards.default import buyurtma_berish, locations, parol
 from aiogram.types import ReplyKeyboardRemove
 import sqlite3
@@ -18,7 +13,7 @@ son = {
 }
 
 
-API_TOKEN = ''
+API_TOKEN = '6539001396:AAHTx8uhcJSf2qqBLWHIVwn-LCvkrVnObEE'
 
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher import FSMContext
@@ -81,8 +76,6 @@ async def show_stats(message: types.Message):
 
 @dp.message_handler(commands='start')
 async def boshlaovchi(message: types.Message):
-    for i in range(1000):
-        await m
     son[message.from_user.id] = 1
     print(son)
     await message.answer('Buyurtmani birga joylashtiramizmi? 🤗', reply_markup=ReplyKeyboardRemove())
@@ -138,7 +131,7 @@ async def back(message: types.Message):
 
 
 
-@dp.message_handler(text='⬅️Ortga',state=Shogirdcha.loc_yetkazib_berish)
+@dp.message_handler(text='⬅️Ortga')
 async def exit(message: types.Message):
     await message.answer('Buyurtmani birga joylashtiramizmi? 🤗')
     await message.answer('''
